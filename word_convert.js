@@ -1,28 +1,35 @@
+/* 
+Date: 2020-08-18 Tue 18:35
+1st try: 20m 03s >> 성공
+Comment:
+BFS/DFS에는 Board, vis, dist, q 가 존재한다. dist 가 vis의 기능을 겸하기도, vis가 dist의 기능을 겸하기도 한다. 
+모르겠으면 다 구현. 생각이 잘 되면 하나로 통합해서 구현
+ */
+
 function solution(begin, target, words) {
 	if (!words.includes(target)) return 0;
 
 	let answer = 0;
-	// let vis = new Array(words.length).fill(false);
-	let dist = new Array(words.length).fill(0);
+	let vis = new Array(words.length).fill(false);
 	const q = [];
 
-	q.push({ word: begin, idx: 0 });
+	q.push({ word: begin, dist: 0 });
 
 	while (q.length > 0) {
 		let curr = q.shift();
 		// console.log(curr);
 
 		if (curr.word === target) {
-			answer = dist[curr.idx];
+			answer = curr.dist;
 			break;
 		}
 
 		for (let i = 0; i < words.length; i++) {
-			if (dist[i] > 0) continue;
+			if (vis[i]) continue;
 
 			if (couldConvert(curr.word, words[i])) {
-				dist[i] = dist[curr.idx] + 1;
-				q.push({ word: words[i], idx: i });
+				vis[i] = true;
+				q.push({ word: words[i], dist: curr.dist + 1 });
 			}
 		}
 		// console.table(q);
